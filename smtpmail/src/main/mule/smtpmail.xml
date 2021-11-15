@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="9c6a455c-0b21-471d-9c0f-da106e21f8ab" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="401e81f4-6d77-4bd4-aea2-dfc648c42c98" >
+		<email:smtp-connection host="smtp.gmail.com" port="587" user="muleedu212@gmail.com" password="pathri1234" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<flow name="smtpmailFlow" doc:id="90739c51-1d9b-4bcf-9f69-5531b167fe6f" >
+		<http:listener doc:name="Listener" doc:id="1069d936-9a53-436c-a4d7-ac3f700c1afb" config-ref="HTTP_Listener_config" path="/smtp"/>
+		<logger level="INFO" doc:name="Logger" doc:id="f2996835-7734-4efa-a994-e4391a86456e" message="helloo i am sending smtp mail"/>
+		<email:send doc:name="Send" doc:id="2a10d3c4-24c8-4d28-a54e-b155d96752e7" config-ref="Email_SMTP" fromAddress="muleedu212@gmail.com" subject="important">
+			<email:to-addresses >
+				<email:to-address value="tata.nalini@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain">
+				<email:content ><![CDATA[payload for sending email]]></email:content>
+			</email:body>
+		</email:send>
+		<logger level="INFO" doc:name="Logger" doc:id="f618d68a-9e7e-429e-9483-4bc922021c46" message="#[payload]"/>
+	</flow>
+</mule>
